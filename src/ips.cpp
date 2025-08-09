@@ -17,6 +17,7 @@ bool PatchIPS(const std::string& filePath, const std::string& ipsPath)
 	if (!inIPS)
  		throw std::invalid_argument("Could not open patch file!");
 
+		
 	// Copy both .ips and the file into vectors for handling
 	std::vector<uint8_t> ips{ std::istreambuf_iterator<char>(inIPS), std::istreambuf_iterator<char>() };
 	std::vector<uint8_t> rom{ std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>() };
