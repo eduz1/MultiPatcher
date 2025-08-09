@@ -1,28 +1,28 @@
 #include "ips.h"
 #include <stdexcept>
 
-// Patches any rom that needs an .ips patch.
-// std::string romPath = path to the rom to be patched
+// Patches any file with an .ips patch.
+// std::string filePath = path to the file to be patched
 // std::string ipsPath = path to the patch itself
 // (optional) std::string outPath = path for the patched output file
-bool PatchIPS(const std::string& romPath, const std::string& ipsPath)
+bool PatchIPS(const std::string& filePath, const std::string& ipsPath)
 {
-	// Open both IPS and ROM for read
+	// Open both IPS and file for read
+	std::ifstream inFile(filePath, std::ios::binary);
 	std::ifstream inIPS(ipsPath, std::ios::binary);
-	std::ifstream inROM(romPath, std::ios::binary);
+	
+	if (!inFile)
+		throw std::invalid_argument("Could not open file!");
 
 	if (!inIPS)
  		throw std::invalid_argument("Could not open patch file!");
 
-	if (!inROM)
-		throw std::invalid_argument("Could not open ROM file!");
-
-	// Copy both .ips and the rom into vectors for handling
+	// Copy both .ips and the file into vectors for handling
 	std::vector<uint8_t> ips{ std::istreambuf_iterator<char>(inIPS), std::istreambuf_iterator<char>() };
-	std::vector<uint8_t> rom{ std::istreambuf_iterator<char>(inROM), std::istreambuf_iterator<char>() };
+	std::vector<uint8_t> rom{ std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>() };
 	uint32_t i = 0, ipsSize = static_cast<uint32_t>(ips.size());
 	inIPS.close();
-	inROM.close();
+	inFile.close();
 
 	// Check for header
 	if (ipsSize < 5 || ips[i++] != 'P' || ips[i++] != 'A' || ips[i++] != 'T' || ips[i++] != 'C' || ips[i++] != 'H')
@@ -83,11 +83,11 @@ bool PatchIPS(const std::string& romPath, const std::string& ipsPath)
 		}
 	}
 
-    //Get the extension of the rom file in a string
-    std::string romExtension = romPath.substr(romPath.find_last_of(".") + 1);
+    //Get the extension of the file in a string
+    std::string fileExtension = filePath.substr(filePath.find_last_of(".") + 1);
 
 	// Create the output stream
-	std::ofstream out("output." + romExtension, std::ios::out | std::ios::binary);
+	std::ofstream out("output." + fileExtension, std::ios::out | std::ios::binary);
 
 	if (out.is_open())
 	{
