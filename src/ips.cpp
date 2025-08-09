@@ -40,9 +40,7 @@ bool PatchIPS(const std::string& filePath, const std::string& ipsPath)
         // Reading 0x454F46 doubles as the "EOF" ASCII in the patch file.
         // That means a successfully patch, break out and save to output.
 		if (offset == 0x454F46)
-		{
 			break;
-		}
 
         // size is 2 bytes
         if (ipsSize < i + 2) 
@@ -97,9 +95,7 @@ bool PatchIPS(const std::string& filePath, const std::string& ipsPath)
 		out.close();
 	}
 	else
-	{
         throw std::runtime_error("Error: Unable to save output.");
-	}
 
 	return true;
 }
