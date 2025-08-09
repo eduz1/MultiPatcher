@@ -7,6 +7,5 @@
 // (optional) std::string outPath = path for the patched output file
 bool PatchBPS(const std::string& filePath, const std::string& bpsPath)
 {
-
     return true;
 }
