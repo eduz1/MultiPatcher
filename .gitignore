@@ -39,6 +39,7 @@
 
 # debug information files
 *.dwo
-/.vs
-/out/build/x64-Debug
+/.vs/*
+/out/*
 /tests/roms
+/CMakeSettings.json
